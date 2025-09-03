@@ -10,7 +10,7 @@ import css from "./Board.module.css";
 interface BoardProps {
   xIsNext: boolean;
   squares: Square[];
-  onPlay: (nextSquares: (string | null)[]) => void;
+  onPlay: (nextSquares: Square[]) => void;
 }
 
 export default function Board({ xIsNext, squares, onPlay }: BoardProps) {

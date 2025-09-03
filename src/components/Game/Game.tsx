@@ -1,8 +1,22 @@
 import { create } from "zustand";
 import Board from "../Board/Board";
 import { combine } from "zustand/middleware";
+import type { Square } from "../../types/squares";
 
-const useGameStore = create(
+type GameState = {
+  history: Square[][];
+  currentMove: number;
+  xIsNext: boolean;
+  setHistory: (
+    nextHistory: Square[][] | ((prev: Square[][]) => Square[][])
+  ) => void;
+  setCurrentMove: (
+    nextCurrentMove: number | ((prev: number) => number)
+  ) => void;
+  setXIsNext: (nextXIsNext: boolean | ((prev: boolean) => boolean)) => void;
+};
+
+const useGameStore = create<GameState>(
   combine(
     { history: [Array(9).fill(null)], currentMove: 0, xIsNext: true },
     (set) => {
@@ -44,7 +58,7 @@ export default function Game() {
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
-  function handlePlay(nextSquares: (string | null)[]) {
+  function handlePlay(nextSquares: Square[]) {
     const nextHistory = history.slice(0, currentMove + 1).concat([nextSquares]);
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
